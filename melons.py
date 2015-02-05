@@ -6,12 +6,17 @@ import os
 app = Flask(__name__)
 app.secret_key = '\xf5!\x07!qj\xa4\x08\xc6\xf8\n\x8a\x95m\xe2\x04g\xbb\x98|U\xa2f\x03'
 app.jinja_env.undefined = jinja2.StrictUndefined
+#controller function(CF) attached to page
+#model function called(MF) (if any)
+#template for page (TP)
 
+#CF index, MF (none), TP index.html
 @app.route("/")
 def index():
     """This is the 'cover' page of the ubermelon site"""
     return render_template("index.html")
 
+#CF list_melons, MF get_melons, TP all_melons.html
 @app.route("/melons")
 def list_melons():
     """This is the big page showing all the melons ubermelon has to offer"""
@@ -19,6 +24,7 @@ def list_melons():
     return render_template("all_melons.html",
                            melon_list = melons)
 
+#CF show_melon, MF get_melon_by_id, TP melon_details.html
 @app.route("/melon/<int:id>")
 def show_melon(id):
     """This page shows the details of a given melon, as well as giving an
@@ -28,6 +34,7 @@ def show_melon(id):
     return render_template("melon_details.html",
                   display_melon = melon)
 
+#CF shopping_cart, MF (none), TP cart.html
 @app.route("/cart")
 def shopping_cart():
     """TODO: Display the contents of the shopping cart. The shopping cart is a
@@ -35,6 +42,7 @@ def shopping_cart():
     accompanying screenshots for details."""
     return render_template("cart.html")
 
+#CF add_to_cart, MF (none), TP (none)
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
     """TODO: Finish shopping cart functionality using session variables to hold
@@ -43,22 +51,36 @@ def add_to_cart(id):
     Intended behavior: when a melon is added to a cart, redirect them to the
     shopping cart page, while displaying the message
     "Successfully added to cart" """
+    #is there a cart? if not, create cart with new list of the melon attributes
+    #if cart, add new list of melon attributes
+    #identify melon by melon id #
+    #new_melon = model.get_melon_by_id(id)
 
-    return "Oops! This needs to be implemented!"
+    if "cart" not in session:
+        session["cart"] = True
+        session[id] = [1]
+        flash("Sucessfully added to new cart!")
+    else:
+        session[id] = [1]
+        flash("Successfully added to cart!")
+   
+    return render_template("cart.html")
 
 
+#CF show_login, MF (none), TP login.html
 @app.route("/login", methods=["GET"])
 def show_login():
     return render_template("login.html")
 
-
+#CF process_login, MF (none), TP (none)
 @app.route("/login", methods=["POST"])
 def process_login():
     """TODO: Receive the user's login credentials located in the 'request.form'
     dictionary, look up the user, and store them in the session."""
+
     return "Oops! This needs to be implemented"
 
-
+#CF checkout, MF (none), TP (none)
 @app.route("/checkout")
 def checkout():
     """TODO: Implement a payment system. For now, just return them to the main
